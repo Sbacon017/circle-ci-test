@@ -8,4 +8,4 @@ jobs:
       - checkout # check out the code in the project directory
       - run: echo "hello world" # run the `echo` command
       - run: echo "holler, human" # added command for testing
-
+      - run: echo "this runs on development" # added command for testing branches
