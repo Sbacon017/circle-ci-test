@@ -9,6 +9,12 @@ jobs:
       - run: echo $test_env_1
       #- run: ssh ubuntu@3.94.166.176
       - run: echo "Hello world!" #Test connection between CCI and AWS
+      - command: |
+          if [$test_conditional == 1]; then
+          echo test_conditional_true
+      - command: |
+          if [$test_conditional != 1]; then
+          echo test_conditional_false
 workflows:
   version: 2
   my-workflow:
