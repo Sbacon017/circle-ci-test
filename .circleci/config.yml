@@ -2,11 +2,17 @@ version: 2
 
 jobs:
   build:
-    machine: true
     context: Test1
+    machine: true
     steps:
       - checkout # check out the code in the project directory
       - run: echo "hello world" # run the `echo` command
       - run: echo $test_env_1
       #- run: ssh ubuntu@3.94.166.176
       - run: echo "Hello world!" #Test connection between CCI and AWS
+workflows:
+  version: 2
+    my-workflow:
+      jobs:
+        build:
+            context: Test1
