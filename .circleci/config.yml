@@ -10,6 +10,7 @@ jobs:
       - run: echo "holler, human" # added command for testing
       - run: echo "this runs on development" # added command for testing branches
   deploy:
+    steps:
       - run: scp myfile.txt ubuntu@3.94.166.176
       - run: ssh ubuntu@3.94.166.176
       - run: echo ./myfile.txt
