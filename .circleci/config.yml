@@ -10,6 +10,3 @@ jobs:
       - run: echo "this runs on development" # added command for testing branches
       - run: ssh ubuntu@3.94.166.176
       - run: echo "Hello world!" #Test connection between CCI and AWS
-  deploy:
-    machine: true
-    steps:
