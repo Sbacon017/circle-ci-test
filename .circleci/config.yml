@@ -12,7 +12,7 @@ jobs:
       - run: echo "Hello world!" #Test connection between CCI and AWS
 workflows:
   version: 2
-    my-workflow:
-      jobs:
-        build:
-            context: Test1
+  my-workflow:
+    jobs:
+      build:
+        context: Test1
