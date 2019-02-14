@@ -11,6 +11,5 @@ jobs:
   deploy:
     machine: true
     steps:
-      - run: scp myfile.txt ubuntu@3.94.166.176
       - run: ssh ubuntu@3.94.166.176
-      - run: echo ./myfile.txt
+      - run: echo "Hello world!" #Test connection between CCI and AWS
