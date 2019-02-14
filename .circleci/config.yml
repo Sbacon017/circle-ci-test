@@ -27,3 +27,5 @@ workflows:
     jobs:
       - build:
           context: Test1
+      - deploy:
+          context: Test1
