@@ -13,7 +13,7 @@ jobs:
   workflows:
     my-workflow:
       jobs:
-        build:
-          context: Test1
-          steps:
+        - build:
+            context: Test1
+            steps:
             - run: echo @test_env_1
