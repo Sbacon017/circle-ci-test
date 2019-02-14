@@ -28,4 +28,6 @@ workflows:
       - build:
           context: Test1
       - deploy:
+          requires:
+              - build
           context: Test1
