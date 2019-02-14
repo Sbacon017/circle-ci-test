@@ -3,13 +3,15 @@ version: 2
 jobs:
   build:
     docker: # use the docker executor type; machine and macos executors are also supported
-      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
+      - image: stable-git # the primary container, where your job's commands are run
     steps:
       - checkout # check out the code in the project directory
       - run: echo "hello world" # run the `echo` command
       - run: echo "holler, human" # added command for testing
       - run: echo "this runs on development" # added command for testing branches
   deploy:
+    docker:
+      image: stable-git
     steps:
       - run: scp myfile.txt ubuntu@3.94.166.176
       - run: ssh ubuntu@3.94.166.176
