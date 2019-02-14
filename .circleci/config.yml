@@ -12,9 +12,11 @@ jobs:
       - run: |
           if [$test_conditional == 1]; then
           echo test_conditional_true
+          fi
       - run: |
           if [$test_conditional != 1]; then
           echo test_conditional_false
+          fi
 workflows:
   version: 2
   my-workflow:
