@@ -10,8 +10,8 @@ jobs:
       - run: echo $test_env_1
       #- run: ssh ubuntu@3.94.166.176
       - run: echo "Hello world!" #Test connection between CCI and AWS
-workflows:
-  my-workflow:
-    jobs:
-      build:
-        context: Test1
+  workflows:
+    my-workflow:
+      jobs:
+        build:
+          context: Test1
