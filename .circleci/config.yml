@@ -3,10 +3,12 @@ version: 2
 jobs:
   build:
     machine: true
+    context: Test1
     steps:
       - checkout # check out the code in the project directory
       - run: echo "hello world" # run the `echo` command
       - run: echo "holler, human" # added command for testing
       - run: echo "this runs on development" # added command for testing branches
+      - run: echo $test_env_1
       - run: ssh ubuntu@3.94.166.176
       - run: echo "Hello world!" #Test connection between CCI and AWS
