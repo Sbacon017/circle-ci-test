@@ -52,4 +52,4 @@ workflows:
       - register_ec2:
           context: ec2-2
           requires:
-            - run-management_command
+            - run_management_command
