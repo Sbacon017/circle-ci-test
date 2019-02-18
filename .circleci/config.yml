@@ -33,7 +33,7 @@ workflows:
           context: ec2-1
           requires:
               - build
-      - run-management_command:
+      - run_management_command:
           context: ec2-1
           requires:
             - deregister_ec2
@@ -45,7 +45,7 @@ workflows:
           context: ec2-2
           requires:
             - register_ec2
-      - run-management_command:
+      - run_smanagement_command:
           context: ec2-2
           requires:
             - deregister_ec2
