@@ -9,7 +9,7 @@ jobs:
   dev_test:
     machine: true
     steps:
-      - run: echo: "Development testing here"
+      - run: echo "Development testing here"
   deregister_ec2: &deregister_ec2_ref
     machine: true
     steps:
