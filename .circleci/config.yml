@@ -2,10 +2,92 @@ version: 2
 
 jobs:
   build:
-    docker: # use the docker executor type; machine and macos executors are also supported
-      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
+    machine: true
     steps:
+<<<<<<< HEAD
       - checkout # check out the code in the project directory
       - run: echo "hello world" # run the `echo` command
       - run: echo "holler, human" # added command for testing
       - run: echo "this runs on development" # added command for testing branches
+=======
+      - checkout
+      - run: echo "hello world"
+  dev_test:
+    machine: true
+    steps:
+      - run: echo "Development testing here"
+  deregister_ec2: &deregister_ec2_ref
+    machine: true
+    steps:
+      - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
+  deregister_ec2_2:
+      <<: *deregister_ec2_ref
+  run_management_command:
+    machine: true
+    steps:
+      - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
+      - run: echo "python manage.py runserver"
+  register_ec2: &register_ec2_ref
+    machine: true
+    steps:
+      - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
+  register_ec2_2:
+      <<: *register_ec2_ref
+  deploy: &deploy_ref
+    machine: true
+    steps:
+      - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
+      - run: echo "git pull"
+  deploy_2:
+    <<: *deploy_ref
+workflows:
+  version: 2
+  master-workflow:
+    jobs:
+      - build:
+          context: Test1
+          filters:
+              branches:
+                  only:
+                      - master
+      - deregister_ec2:
+          context: ec2-1
+          requires:
+              - build
+      - deploy:
+          context: ec2-1
+          requires:
+              - deregister_ec2
+      - run_management_command:
+          context: ec2-1
+          requires:
+            - deploy
+      - register_ec2:
+          context: ec2-1
+          requires:
+            - run_management_command
+      - deregister_ec2_2:
+          context: ec2-2
+          requires:
+            - register_ec2
+      - deploy_2:
+          context: ec2-2
+          requires:
+            - deregister_ec2_2
+      - register_ec2_2:
+          context: ec2-2
+          requires:
+            - deploy_2
+  # development-workflow:
+  #   filters:
+  #     branches:
+  #       only:
+  #         - development
+  #   jobs:
+  #     - build:
+  #         context: Test1
+  #     - dev_test:
+  #         context: Test1
+  #         requires:
+  #           - build
+>>>>>>> master
