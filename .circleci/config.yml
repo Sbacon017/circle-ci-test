@@ -37,13 +37,13 @@ jobs:
 workflows:
   version: 2
   master-workflow:
-    filters:
-      branches:
-        only:
-          - master
     jobs:
       - build:
           context: Test1
+          filters:
+              branches:
+                  only:
+                      - master
       - deregister_ec2:
           context: ec2-1
           requires:
@@ -72,15 +72,15 @@ workflows:
           context: ec2-2
           requires:
             - deploy_2
-  development-workflow:
-    filters:
-      branches:
-        only:
-          - development
-    jobs:
-      - build:
-          context: Test1
-      - dev_test:
-          context: Test1
-          requires:
-            - build
+  # development-workflow:
+  #   filters:
+  #     branches:
+  #       only:
+  #         - development
+  #   jobs:
+  #     - build:
+  #         context: Test1
+  #     - dev_test:
+  #         context: Test1
+  #         requires:
+  #           - build
