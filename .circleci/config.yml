@@ -5,18 +5,20 @@ jobs:
     machine: true
     steps:
       - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
-      - run: echo $test_env_1
-      #- run: ssh ubuntu@3.94.166.176
-      - run: echo "Hello world!" #Test connection between CCI and AWS
-      - run: |
-          if ["{$test_conditional}" == "1"]; then
-          echo test_conditional_true
-          fi
-      - run: |
-          if [$test_conditional != 1]; then
-          echo test_conditional_false
-          fi
+      - run: echo "hello world"
+  deregister-ec2:
+      machine: true
+      steps:
+          - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
+  run-management-command:
+      machine: true
+      steps:
+          - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
+          - run: echo "python manage.py runserver"
+  register-ec2:
+      machine: true
+      steps:
+          - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
   deploy:
       machine: true
       steps:
@@ -27,7 +29,27 @@ workflows:
     jobs:
       - build:
           context: Test1
-      - deploy:
+      - deregister-ec2:
+          context: ec2-1
           requires:
               - build
-          context: Test1
+      - run-management-command:
+          context: ec2-1
+          requires:
+            - deregister-ec2
+      - register-ec2:
+          context: ec2-1
+          requires:
+            - run-management-command
+      - deregister-ec2:
+          context: ec2-2
+          requires:
+            - register-ec2
+      - run-management-command:
+          context: ec2-2
+          requires:
+            - deregister-ec2
+      - register-ec2:
+          context: ec2-2
+          requires:
+            - run-management-command
