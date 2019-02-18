@@ -7,24 +7,24 @@ jobs:
       - checkout # check out the code in the project directory
       - run: echo "hello world"
   deregister_ec2: &deregister_ec2_ref
-      machine: true
-      steps:
-          - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
+    machine: true
+    steps:
+      - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
   deregister_ec2_2:
       <<: *deregister_ec2_ref
   run_management_command:
-      machine: true
-      steps:
-          - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
-          - run: echo "python manage.py runserver"
+    machine: true
+    steps:
+      - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
+      - run: echo "python manage.py runserver"
   register_ec2:
-      machine: true
-      steps:
-          - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
+    machine: true
+    steps:
+      - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
   deploy:
-      machine: true
-      steps:
-          - run: echo "deploy phase!"
+    machine: true
+    steps:
+      - run: echo "deploy phase!"
 workflows:
   version: 2
   my-workflow:
