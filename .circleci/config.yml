@@ -6,16 +6,16 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: echo "hello world"
-  deregister-ec2:
+  deregister_ec2:
       machine: true
       steps:
           - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
-  run-management-command:
+  run-management_command:
       machine: true
       steps:
           - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
           - run: echo "python manage.py runserver"
-  register-ec2:
+  register_ec2:
       machine: true
       steps:
           - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
@@ -29,27 +29,27 @@ workflows:
     jobs:
       - build:
           context: Test1
-      - deregister-ec2:
+      - deregister_ec2:
           context: ec2-1
           requires:
               - build
-      - run-management-command:
+      - run-management_command:
           context: ec2-1
           requires:
             - deregister-ec2
-      - register-ec2:
+      - register_ec2:
           context: ec2-1
           requires:
             - run-management-command
-      - deregister-ec2:
+      - deregister_ec2:
           context: ec2-2
           requires:
             - register-ec2
-      - run-management-command:
+      - run-management_command:
           context: ec2-2
           requires:
             - deregister-ec2
-      - register-ec2:
+      - register_ec2:
           context: ec2-2
           requires:
             - run-management-command
