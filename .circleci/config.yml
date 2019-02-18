@@ -44,9 +44,9 @@ workflows:
           requires:
             - run_management_command
       - deregister_ec2_2:
-        context: ec2-2
-        requires:
-          - register_ec2
+          context: ec2-2
+          requires:
+            - register_ec2
       # - run_management_command:
       #     context: ec2-2
       #     requires:
