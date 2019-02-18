@@ -41,9 +41,15 @@ workflows:
       - build:
           context: Test1
           filters:
-              branches:
-                  only:
-                      - master
+            branches:
+              only:
+                - master
+      - dev_test:
+          context: Test1
+          filters:
+            branches:
+              only:
+                - development
       - deregister_ec2:
           context: ec2-1
           requires:
