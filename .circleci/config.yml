@@ -43,7 +43,7 @@ workflows:
       - deploy:
           context: ec2-1
           requires:
-              - deregister-ec2
+              - deregister_ec2
       - run_management_command:
           context: ec2-1
           requires:
