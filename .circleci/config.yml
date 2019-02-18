@@ -10,7 +10,7 @@ jobs:
       machine: true
       steps:
           - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
-  run-management_command:
+  run_management_command:
       machine: true
       steps:
           - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
@@ -36,20 +36,20 @@ workflows:
       - run-management_command:
           context: ec2-1
           requires:
-            - deregister-ec2
+            - deregister_ec2
       - register_ec2:
           context: ec2-1
           requires:
-            - run-management-command
+            - run_management_command
       - deregister_ec2:
           context: ec2-2
           requires:
-            - register-ec2
+            - register_ec2
       - run-management_command:
           context: ec2-2
           requires:
-            - deregister-ec2
+            - deregister_ec2
       - register_ec2:
           context: ec2-2
           requires:
-            - run-management-command
+            - run-management_command
