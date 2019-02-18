@@ -6,6 +6,10 @@ jobs:
     steps:
       - checkout
       - run: echo "hello world"
+  dev_test:
+    machine: true
+    steps:
+      - run: echo: "Development testing here"
   deregister_ec2: &deregister_ec2_ref
     machine: true
     steps:
@@ -32,7 +36,11 @@ jobs:
     <<: *deploy_ref
 workflows:
   version: 2
-  my-workflow:
+  master-workflow:
+    filters:
+      branches:
+        only:
+          - master
     jobs:
       - build:
           context: Test1
@@ -64,3 +72,15 @@ workflows:
           context: ec2-2
           requires:
             - deploy_2
+  development-workflow:
+    filters:
+      branches:
+        only:
+          - development
+    jobs:
+      - build:
+          context: Test1
+      - dev_test:
+          context: Test1
+          requires:
+            - build
