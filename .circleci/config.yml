@@ -9,7 +9,7 @@ jobs:
   deregister_ec2:
       machine: true
       steps:
-          - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
+          - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
   run_management_command:
       machine: true
       steps:
@@ -18,7 +18,7 @@ jobs:
   register_ec2:
       machine: true
       steps:
-          - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances $EC2_NAME"
+          - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
   deploy:
       machine: true
       steps:
