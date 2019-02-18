@@ -4,7 +4,7 @@ jobs:
   build:
     machine: true
     steps:
-      - checkout # check out the code in the project directory
+      - checkout
       - run: echo "hello world"
   deregister_ec2: &deregister_ec2_ref
     machine: true
@@ -17,14 +17,19 @@ jobs:
     steps:
       - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
       - run: echo "python manage.py runserver"
-  register_ec2:
+  register_ec2: &register_ec2_ref
     machine: true
     steps:
       - run: echo "aws elb register-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
-  deploy:
+  register_ec2_2:
+      <<: *register_ec2_ref
+  deploy: &deploy_ref
     machine: true
     steps:
-      - run: echo "deploy phase!"
+      - run: echo "ssh ubuntu@$EC2_PUBLIC_DNS"
+      - run: echo "git pull"
+  deploy_2:
+    <<: *deploy_ref
 workflows:
   version: 2
   my-workflow:
@@ -35,10 +40,14 @@ workflows:
           context: ec2-1
           requires:
               - build
+      - deploy:
+          context: ec2-1
+          requires:
+              - deregister-ec2
       - run_management_command:
           context: ec2-1
           requires:
-            - deregister_ec2
+            - deploy
       - register_ec2:
           context: ec2-1
           requires:
@@ -47,11 +56,11 @@ workflows:
           context: ec2-2
           requires:
             - register_ec2
-      # - run_management_command:
-      #     context: ec2-2
-      #     requires:
-      #       - deregister_ec2
-      # - register_ec2:
-      #     context: ec2-2
-      #     requires:
-      #       - run_management_command
+      - deploy_2:
+          context: ec2-2
+          requires:
+            - deregister_ec2_2
+      - register_ec2_2:
+          context: ec2-2
+          requires:
+            - deploy_2
