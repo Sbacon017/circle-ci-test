@@ -6,10 +6,12 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: echo "hello world"
-  deregister_ec2:
+  deregister_ec2: &deregister_ec2_ref
       machine: true
       steps:
           - run:  echo "aws elb deregister-instances-with-load-balancer --load-balancer-name HARD_CODE_ELB --instances {$EC2_NAME}"
+  deregister_ec2_2:
+      <<: *deregister_ec2_ref
   run_management_command:
       machine: true
       steps:
@@ -41,10 +43,10 @@ workflows:
           context: ec2-1
           requires:
             - run_management_command
-      # - deregister_ec2:
-      #     context: ec2-2
-      #     requires:
-      #       - register_ec2
+       - deregister_ec2_2:
+          context: ec2-2
+          requires:
+            - register_ec2
       # - run_management_command:
       #     context: ec2-2
       #     requires:
